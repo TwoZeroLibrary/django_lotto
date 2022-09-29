@@ -1,0 +1,45 @@
+<!--코드의 가독성을 위해 들여쓰기 해주는 것이 좋음-->
+
+<!DOCTYPE html>
+
+{% load static %} <!-- 장고 템플릿 태그라고 부름, 결과가 html 텍스트 상으로 남지 않으며, 장고의 특정한 명령어를 사용할 때 씀 -->
+
+<html lang="ko"> <!-- lang="ko"는 과거엔 필수였지만 지금은 필수는 아님-->
+<head>
+  <title>My Little Lotto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- bootstrapcdn의 기능 가져오기 -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  <!-- 구글 폰트 가져오기 -->
+  <link href="//fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+
+  <!-- <link rel="stylesheet" href="{% static 'lotto.css를 새로 만들 경로(접근 가능한 URL)' %}">-->
+  <link rel="stylesheet" href="{% static 'css/lotto.css' %}">
+</head>
+
+<body>
+  <div class="page-header">
+  <!-- <h1>Selected Lotto Numbers</h1> -->
+  <h1>
+    Selected Lotto Numbers
+    <a href="{% url 'new_lotto' %}"> <!-- URL 패턴이 변경 할때 자동으로 변경됨(URL-Reversing), 별명으로 넣줌 -->
+    <span class="glyphicon glyphicon-plus btn btn-default"></span> <!-- 제목 옆에 버튼생성 -->
+    </a>
+  </h1>
+  </div>
+
+  <div class="container lotto">
+    <p> {{ lottos }} </p> <!-- views.py의 index함수에서 딕셔너리의 키값을 받아와서 넣는곳 -->
+    {% for lotto in lottos %}
+    <!-- urls.py의 name='detail' 과 lottokey 에 해당 -->
+      <h2><a href="{% url 'detail' lottokey=lotto.pk %}">{{lotto.text}}</a></h2> <!-- 설명내용, pk == id -->
+      <p>{{ lotto.update_date }}</p> <!-- 날짜 업데이트 -->
+      <p>{{ lotto.lottos | linebreaksbr }}</p>  <!-- | linebreaksbr -> 로또 번호 줄바꿈 해서 출력해줌 -->
+    {% endfor %} <!-- 장고 실행을 닫아줘야 함 -->
+  </div>
+
+</body>
+</html>
